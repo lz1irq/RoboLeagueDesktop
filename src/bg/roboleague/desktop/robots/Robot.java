@@ -25,4 +25,8 @@ public class Robot {
 	public void setLapTime(int lap, int time) {
 		lapTimes[lap] = time;
 	}
+	
+	public String toString() {
+		return name;
+	}
 }
