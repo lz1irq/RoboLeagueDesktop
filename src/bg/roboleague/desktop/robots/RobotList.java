@@ -71,7 +71,7 @@ public class RobotList extends AbstractListModel<Robot> {
 
 	public void export() throws IOException {
 		for (RobotExporter exporter : exporters) {
-			exporter.export(robots);
+			exporter.exportRobots(robots);
 		}
 	}
 

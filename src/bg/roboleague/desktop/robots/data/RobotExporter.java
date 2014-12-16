@@ -30,6 +30,6 @@ public abstract class RobotExporter {
 		this.exportLocation = exportLocation;
 	}
 
-	public abstract void export(List<Robot> robots) throws IOException;
+	public abstract void exportRobots(List<Robot> robots) throws IOException;
 	
 }

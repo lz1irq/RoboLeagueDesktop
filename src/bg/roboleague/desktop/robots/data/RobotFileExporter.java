@@ -23,7 +23,7 @@ public class RobotFileExporter extends RobotExporter {
 		super(location, encoding);
 	}
 
-	public void export(List<Robot> robots) throws IOException {
+	public void exportRobots(List<Robot> robots) throws IOException {
 		String robotsJson = JsonWriter.objectToJson(robots);
 		OutputStreamWriter exportStream = new OutputStreamWriter(new FileOutputStream(exportLocation), encoding);
 		BufferedWriter output = new BufferedWriter(exportStream);
