@@ -2,6 +2,7 @@ package bg.roboleague.desktop.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -9,6 +10,9 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -26,6 +30,7 @@ public class MainWindow extends JFrame {
 	public MainWindow(RobotList robolist) {
 		robots = robolist;
 		setUpWindow();
+		addMenuBar();
 		addGUIElements();
 	}
 
@@ -35,6 +40,7 @@ public class MainWindow extends JFrame {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -92,9 +98,37 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-
-		add(robotView, "span 2, height :500:, width :208: ,wrap");
+		add(robotView, "span 2, height :550:, width :208: ,wrap");
 		add(addButton, "width :100:");
 		add(removeButton, "width :100:");
+	}
+
+	private void addMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
+		
+		JMenu settingsMenu = new JMenu("Settings");
+		settingsMenu.setMnemonic(KeyEvent.VK_S);
+		
+		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setMnemonic(KeyEvent.VK_H);
+
+		JMenuItem exit = new JMenuItem("Exit");
+		exit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		fileMenu.add(exit);
+
+		menuBar.add(fileMenu);
+		menuBar.add(settingsMenu);
+		menuBar.add(helpMenu);
+		
+		setJMenuBar(menuBar);
 	}
 }
