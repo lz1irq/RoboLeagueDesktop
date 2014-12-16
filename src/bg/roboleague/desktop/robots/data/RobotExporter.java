@@ -1,11 +1,9 @@
 package bg.roboleague.desktop.robots.data;
 
-import bg.roboleague.desktop.robots.Robot;
-
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
+
+import bg.roboleague.desktop.robots.Robot;
 
 public abstract class RobotExporter {
 	

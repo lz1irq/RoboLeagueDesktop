@@ -1,12 +1,13 @@
 package bg.roboleague.desktop.robots;
 
-import bg.roboleague.desktop.robots.data.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
+
+import bg.roboleague.desktop.robots.data.RobotExporter;
+import bg.roboleague.desktop.robots.data.RobotImporter;
 
 public class RobotList extends AbstractListModel<Robot> {
 
