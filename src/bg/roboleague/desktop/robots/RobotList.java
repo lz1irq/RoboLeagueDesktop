@@ -12,6 +12,7 @@ public class RobotList extends AbstractListModel<Robot> {
 
 	private List<Robot> robots;
 	private List<RobotExporter> exporters;
+	private RobotImporter importer;
 
 	public RobotList() {
 		super();
@@ -73,6 +74,18 @@ public class RobotList extends AbstractListModel<Robot> {
 		for (RobotExporter exporter : exporters) {
 			exporter.exportRobots(robots);
 		}
+	}
+
+	public RobotImporter getImporter() {
+		return importer;
+	}
+
+	public void setImporter(RobotImporter importer) {
+		this.importer = importer;
+	}
+	
+	public void importRobots() throws IOException {
+		robots = importer.importRobots();
 	}
 
 	

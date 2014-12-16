@@ -19,6 +19,7 @@ import net.miginfocom.swing.MigLayout;
 import bg.roboleague.desktop.robots.Robot;
 import bg.roboleague.desktop.robots.RobotList;
 import bg.roboleague.desktop.robots.data.RobotFileExporter;
+import bg.roboleague.desktop.robots.data.RobotFileImporter;
 
 public class MainWindow extends JFrame {
 
@@ -31,7 +32,6 @@ public class MainWindow extends JFrame {
 	private final static int REMAINDER = -1;
 
 	public MainWindow() {
-		
 		setUpWindow();
 		
 		JButton addButton = new JButton("Add");
@@ -104,10 +104,13 @@ public class MainWindow extends JFrame {
 	        });
 	}
 
-	public static void main(String[] args) {
-
-		robots.addExporter(new RobotFileExporter("robots.txt"));
-
+	public static void main(String[] args) throws IOException {
+		final String robotFile = "robots.txt";
+		robots.setImporter(new RobotFileImporter(robotFile));
+		robots.addExporter(new RobotFileExporter(robotFile));
+		
+		robots.importRobots();
+		
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
