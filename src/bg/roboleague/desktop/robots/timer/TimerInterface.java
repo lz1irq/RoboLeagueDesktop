@@ -1,13 +1,13 @@
 package bg.roboleague.desktop.robots.timer;
 
+import java.util.List;
+
 public abstract class TimerInterface {
-	private String portName;
-	private int availiable;
+	protected int availiable;
 	
-	public abstract String[] getPortNames();
+	public abstract List<String> getPortNames();
 	
-	public TimerInterface(String port) {
-		portName = port;
+	public TimerInterface() {
 		availiable = 0;
 	};
 	
