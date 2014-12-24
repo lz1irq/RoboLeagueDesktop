@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,13 +19,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 import net.miginfocom.swing.MigLayout;
 import bg.roboleague.desktop.robots.Robot;
@@ -87,10 +81,9 @@ public class MainWindow extends JFrame {
 
 		final LapTimesTableModel tmod = new LapTimesTableModel();
 		tmod.addTableModelListener(new TableModelListener() {
-			
 			@Override
 			public void tableChanged(TableModelEvent event) {
-				if(event.getType() == event.UPDATE) {
+				if (event.getType() == event.UPDATE) {
 					try {
 						robots.export();
 					} catch (IOException e) {
@@ -113,7 +106,8 @@ public class MainWindow extends JFrame {
 						if (model.isSelectionEmpty() == false) {
 							// only select the first robot - otherwise it
 							// wouldn't make sense
-							selectedRobot = robots.getElementAt(model.getMinSelectionIndex());
+							selectedRobot = robots.getElementAt(model
+									.getMinSelectionIndex());
 							tmod.setSelectedRobot(selectedRobot);
 						}
 					}
@@ -133,6 +127,7 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
+
 		add(robotView, "span 2, height :550:, width :208:");
 		add(lapTimes, "wrap");
 		add(addButton, "width :100:");
