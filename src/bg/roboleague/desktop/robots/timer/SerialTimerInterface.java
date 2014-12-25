@@ -8,6 +8,8 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 
 import java.io.BufferedReader;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TooManyListenersException;
 
 public class SerialTimerInterface extends TimerInterface {
 
@@ -30,6 +33,12 @@ public class SerialTimerInterface extends TimerInterface {
 
 	private BufferedReader input;
 	private PrintWriter output;
+
+	private List<TimerDataReceiver> receivers;
+
+	public SerialTimerInterface() {
+		receivers = new ArrayList<TimerDataReceiver>();
+	}
 
 	@Override
 	public List<String> getPortNames() {
@@ -55,16 +64,6 @@ public class SerialTimerInterface extends TimerInterface {
 	}
 
 	@Override
-	public int availiable() {
-		return availiable;
-	}
-
-	@Override
-	public String read() {
-		return null;
-	}
-
-	@Override
 	public void connect(String portName, int baudRate) {
 		try {
 			CommPortIdentifier portIdentifier = CommPortIdentifier
@@ -79,6 +78,20 @@ public class SerialTimerInterface extends TimerInterface {
 					serialPort.getInputStream()));
 			output = new PrintWriter(serialPort.getOutputStream());
 
+			serialPort.addEventListener(new SerialPortEventListener() {
+
+				@Override
+				public void serialEvent(SerialPortEvent arg0) {
+					try {
+						notifyReceivers(input.readLine());
+					} catch (IOException e) {
+						System.out
+								.println("Error: cannot read from serial port!");
+						e.printStackTrace();
+					}
+				}
+			});
+
 		} catch (NoSuchPortException e) {
 			e.printStackTrace();
 			System.out.println("Error: port " + portName + " not found!");
@@ -89,6 +102,8 @@ public class SerialTimerInterface extends TimerInterface {
 			e.printStackTrace();
 		} catch (UnsupportedCommOperationException e) {
 			System.out.println("Error: invalid serial port parameters!");
+			e.printStackTrace();
+		} catch (TooManyListenersException e) {
 			e.printStackTrace();
 		}
 

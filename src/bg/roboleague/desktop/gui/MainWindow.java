@@ -63,7 +63,6 @@ public class MainWindow extends JFrame {
 			}
 		});
 	}
-
 	private void addGUIElements() {
 
 		JButton addButton = new JButton("Add");
@@ -78,7 +77,7 @@ public class MainWindow extends JFrame {
 			}
 
 		});
-
+		
 		final LapTimesTableModel tmod = new LapTimesTableModel();
 		tmod.addTableModelListener(new TableModelListener() {
 			@Override

@@ -2,11 +2,13 @@ package bg.roboleague.desktop.gui;
 
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 import bg.roboleague.desktop.robots.RobotList;
 import bg.roboleague.desktop.robots.data.*;
+import bg.roboleague.desktop.robots.timer.*;
 
 public class Main {
 
@@ -16,7 +18,7 @@ public class Main {
 		robots.setImporter(new RobotFileImporter(robotFile));
 		robots.addExporter(new RobotFileExporter(robotFile));
 		robots.importRobots();
-
+		
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
