@@ -11,6 +11,8 @@ public abstract class TimerInterface {
 		availiable = 0;
 	};
 	
+	public abstract void connect(String portName, int baudRate);
+	
 	public abstract void write(String message);
 	public abstract int availiable();
 	public abstract String read();
