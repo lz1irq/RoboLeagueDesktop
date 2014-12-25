@@ -15,6 +15,7 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -32,7 +33,7 @@ public class SerialTimerInterface extends TimerInterface {
 	private HashMap<String, CommPortIdentifier> ports;
 
 	private BufferedReader input;
-	private PrintWriter output;
+	private OutputStream output;
 
 	private List<TimerDataReceiver> receivers;
 
@@ -59,8 +60,13 @@ public class SerialTimerInterface extends TimerInterface {
 	}
 
 	@Override
-	public void write(String message) {
-
+	public void write(String command) {
+		try {
+			output.write(command.getBytes());
+		} catch (IOException e) {
+			System.out.println("Error: could not write to serial port!");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -73,15 +79,16 @@ public class SerialTimerInterface extends TimerInterface {
 
 			serialPort.setSerialPortParams(baudRate, DEFAULT_DATABITS,
 					DEFAULT_STOPBITS, DEFAULT_PARITY);
+			serialPort.notifyOnDataAvailable(true);
 
 			input = new BufferedReader(new InputStreamReader(
 					serialPort.getInputStream()));
-			output = new PrintWriter(serialPort.getOutputStream());
+			output = serialPort.getOutputStream();
 
 			serialPort.addEventListener(new SerialPortEventListener() {
 
 				@Override
-				public void serialEvent(SerialPortEvent arg0) {
+				public void serialEvent// TODO Auto-generated catch block(SerialPortEvent arg0) {
 					try {
 						notifyReceivers(input.readLine());
 					} catch (IOException e) {
