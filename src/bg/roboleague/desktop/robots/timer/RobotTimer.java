@@ -2,10 +2,10 @@ package bg.roboleague.desktop.robots.timer;
 
 public class RobotTimer implements TimerDataReceiver {
 
-	private TimerInterface timer;
+	private SerialInterface timer;
 	
-	public RobotTimer(TimerInterface ti) {
-		timer = ti;
+	public RobotTimer(SerialInterface serial) {
+		timer = serial;
 		timer.addReceiver(this);
 	}
 	

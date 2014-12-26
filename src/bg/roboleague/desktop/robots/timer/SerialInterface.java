@@ -1,8 +1,5 @@
 package bg.roboleague.desktop.robots.timer;
 
-// RXTX binary builds provided as a courtesy of Mfizz Inc. (http://mfizz.com/).
-// Please see http://mfizz.com/oss/rxtx-for-java for more information.
-
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
@@ -23,31 +20,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TooManyListenersException;
 
-public class SerialTimerInterface extends TimerInterface {
+public class SerialInterface {
 
 	private static int DEFAULT_DATABITS = SerialPort.DATABITS_8;
 	private static int DEFAULT_STOPBITS = SerialPort.STOPBITS_1;
 	private static int DEFAULT_PARITY = SerialPort.PARITY_NONE;
 
 	private SerialPort serialPort;
-	private HashMap<String, CommPortIdentifier> ports;
+	private static HashMap<String, CommPortIdentifier> ports;
 
 	private BufferedReader input;
 	private OutputStream output;
 
 	private List<TimerDataReceiver> receivers;
 
-	public SerialTimerInterface() {
+	public SerialInterface() {
 		receivers = new ArrayList<TimerDataReceiver>();
 		ports = new HashMap<String, CommPortIdentifier>();
 	}
 
-	@Override
-	public List<String> getPortNames() {
+	public static List<String> getPortNames() {
 
 		List<String> portNames = new ArrayList<String>();
 		Enumeration portList = CommPortIdentifier.getPortIdentifiers();
 
+		ports.clear();
 		while (portList.hasMoreElements()) {
 			CommPortIdentifier port = (CommPortIdentifier) portList
 					.nextElement();
@@ -60,7 +57,6 @@ public class SerialTimerInterface extends TimerInterface {
 		return portNames;
 	}
 
-	@Override
 	public void write(String command) {
 		try {
 			output.write(command.getBytes());
@@ -70,7 +66,6 @@ public class SerialTimerInterface extends TimerInterface {
 		}
 	}
 
-	@Override
 	public void connect(String portName, int baudRate) {
 		try {
 			CommPortIdentifier portIdentifier = CommPortIdentifier
@@ -115,6 +110,20 @@ public class SerialTimerInterface extends TimerInterface {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void addReceiver(TimerDataReceiver receiver) {
+		receivers.add(receiver);
+	}
+
+	public void removeReceiver(TimerDataReceiver receiver) {
+		receivers.remove(receiver);
+	}
+
+	protected void notifyReceivers(String command) {
+		for (TimerDataReceiver receiver : receivers) {
+			receiver.receive(command);
+		}
 	}
 
 }
