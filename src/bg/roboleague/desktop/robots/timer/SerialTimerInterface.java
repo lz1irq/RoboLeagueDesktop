@@ -39,6 +39,7 @@ public class SerialTimerInterface extends TimerInterface {
 
 	public SerialTimerInterface() {
 		receivers = new ArrayList<TimerDataReceiver>();
+		ports = new HashMap<String, CommPortIdentifier>();
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class SerialTimerInterface extends TimerInterface {
 			serialPort.addEventListener(new SerialPortEventListener() {
 
 				@Override
-				public void serialEvent// TODO Auto-generated catch block(SerialPortEvent arg0) {
+				public void serialEvent(SerialPortEvent arg0) {
 					try {
 						notifyReceivers(input.readLine());
 					} catch (IOException e) {

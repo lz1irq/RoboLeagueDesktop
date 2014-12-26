@@ -36,8 +36,11 @@ public class MainWindow extends JFrame {
 
 	private Robot selectedRobot = null;
 
-	public MainWindow(RobotList robolist) {
+	private boolean timerEnabled;
+
+	public MainWindow(RobotList robolist, boolean enabled) {
 		robots = robolist;
+		timerEnabled = enabled;
 		setUpWindow();
 		addMenuBar();
 		addGUIElements();
@@ -63,6 +66,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 	}
+
 	private void addGUIElements() {
 
 		JButton addButton = new JButton("Add");
@@ -77,7 +81,7 @@ public class MainWindow extends JFrame {
 			}
 
 		});
-		
+
 		final LapTimesTableModel tmod = new LapTimesTableModel();
 		tmod.addTableModelListener(new TableModelListener() {
 			@Override
@@ -92,6 +96,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		JTable jt = new JTable(tmod);
+		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane lapTimes = new JScrollPane(jt);
 
 		final JList robotList = new JList(robots);
@@ -127,10 +132,28 @@ public class MainWindow extends JFrame {
 			}
 		});
 
+		JButton lapToggleButton = new JButton("Start");
+		lapToggleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JButton btn = (JButton) event.getSource();
+				if (btn.getText().equals("Start")) {
+					btn.setText("Stop");
+				} else {
+					btn.setText("Start");
+				}
+			}
+		});
+		
+		if(timerEnabled == false) {
+			lapToggleButton.setEnabled(false);
+		}
+
 		add(robotView, "span 2, height :550:, width :208:");
 		add(lapTimes, "wrap");
 		add(addButton, "width :100:");
 		add(removeButton, "width :100:");
+		add(lapToggleButton);
 	}
 
 	private void addMenuBar() {
