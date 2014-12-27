@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-import bg.roboleague.desktop.robots.timer.TimerInterface;
+import bg.roboleague.desktop.robots.timer.SerialInterface;
 
 public class SerialSetupWindow extends JPanel {
 	private final static int WINDOW_WIDTH = 800;
@@ -21,13 +21,10 @@ public class SerialSetupWindow extends JPanel {
 	
 	private final static int DEFAULT_BAUDRATE = 9600;
 
-	private TimerInterface serial;
-
 	private JComboBox portsList;
 	private JComboBox baudRateList;
 
-	public SerialSetupWindow(TimerInterface ti) {
-		serial = ti;
+	public SerialSetupWindow() {
 		setupWindow();
 		addGUIElements();
 	}
@@ -50,7 +47,7 @@ public class SerialSetupWindow extends JPanel {
 		JLabel portLabel = new JLabel("Port");
 		
 		portsList = new JComboBox();
-		List<String> ports = serial.getPortNames();
+		List<String> ports = SerialInterface.getPortNames();
 		for (String port : ports) {
 			portsList.addItem(port);
 		}
@@ -63,14 +60,6 @@ public class SerialSetupWindow extends JPanel {
 				baudRateList.setSelectedIndex(i);
 			}
 		}
-
-		JButton buttonOK = new JButton();
-		buttonOK.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-			}
-		});
 		
 		add(portLabel);
 		add(baudRateLabel, "wrap");

@@ -7,12 +7,14 @@ import bg.roboleague.desktop.robots.Robot;
 
 public abstract class RobotExporter {
 	
+	protected final static String DEFAULT_ENCODING = "UTF-8";
+	
 	protected String encoding;
 	protected String exportLocation;
 	
 	public RobotExporter(String location) {
 		this.exportLocation = location;
-		this.encoding = "UTF-8";
+		this.encoding = DEFAULT_ENCODING;
 	}
 	
 	public RobotExporter(String location, String encoding) {
@@ -28,6 +30,6 @@ public abstract class RobotExporter {
 		this.exportLocation = exportLocation;
 	}
 
-	public abstract void exportRobots(List<Robot> robots) throws IOException;
+	public abstract void exportRobots(List<Robot> robots);
 	
 }

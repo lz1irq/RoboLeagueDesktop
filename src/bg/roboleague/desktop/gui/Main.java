@@ -25,9 +25,9 @@ public class Main {
 		robots.addExporter(new RobotFileExporter(robotFile));
 		robots.importRobots();
 
-		final TimerInterface serial = new SerialTimerInterface();
+		final SerialInterface serial = new SerialInterface();
 
-		SerialSetupWindow setup = new SerialSetupWindow(serial);
+		SerialSetupWindow setup = new SerialSetupWindow();
 		final int result = JOptionPane.showConfirmDialog(null, setup, "Timer Setup",
 				JOptionPane.OK_CANCEL_OPTION);
 

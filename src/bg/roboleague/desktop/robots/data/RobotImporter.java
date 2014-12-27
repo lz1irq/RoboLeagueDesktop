@@ -6,12 +6,14 @@ import java.util.List;
 import bg.roboleague.desktop.robots.Robot;
 
 public abstract class RobotImporter {
+	
+	protected final static String DEFAULT_ENCODING = "UTF-8";
+	
 	protected String importLocation;
 	protected String encoding;
 	
 	public RobotImporter(String location) {
-		importLocation = location;
-		encoding = "UTF-8";
+		this(location, DEFAULT_ENCODING);
 	}
 	
 	public RobotImporter(String location, String encoding) {

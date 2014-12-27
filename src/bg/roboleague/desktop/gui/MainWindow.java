@@ -60,7 +60,6 @@ public class MainWindow extends JFrame {
 				try {
 					robots.export();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -108,8 +107,6 @@ public class MainWindow extends JFrame {
 						ListSelectionModel model = (ListSelectionModel) e
 								.getSource();
 						if (model.isSelectionEmpty() == false) {
-							// only select the first robot - otherwise it
-							// wouldn't make sense
 							selectedRobot = robots.getElementAt(model
 									.getMinSelectionIndex());
 							tmod.setSelectedRobot(selectedRobot);
