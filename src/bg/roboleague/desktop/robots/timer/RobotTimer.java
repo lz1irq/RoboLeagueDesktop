@@ -17,6 +17,7 @@ public class RobotTimer implements TimerDataReceiver {
 	public final static String BEGIN_MEASURING = "BMS";
 	public final static String STOP_MEASURING = "SMS";
 	public final static String CALIBRATE = "CAL";
+	public final static String STANDBY = "SBY";
 
 	public final static String MEASURED_VALUE = "RAW";
 	public final static String LAP_STARTED = "SLP";
@@ -34,20 +35,22 @@ public class RobotTimer implements TimerDataReceiver {
 		initializeParameters();
 	}
 
-	private void initializeParameters() {
-		parameters = new HashMap<String, Integer>();
-		parameterRequests = new HashMap<String, Boolean>();
-
-		parameters.put(THRESHOLD_NEAR, 0);
-		parameters.put(THRESHOLD_DISTANT, 0);
-		parameters.put(TOLERANCE, 0);
-		parameters.put(TIME_MINIMUM, 0);
-		parameters.put(TIMES_MEASURE, 0);
-		parameters.put(DELAY_MEASURE, 0);
-		parameters.put(MEASURED_VALUE, 0);
-		parameters.put(LAP_FINISHED, 0);
+	public void enterCalibrationMode() {
+		serial.write(CALIBRATE);
 	}
-
+	
+	public void exitCalibrationMode() {
+		serial.write(STANDBY);
+	}
+	
+	public int getThresholdNear() {
+		return request(THRESHOLD_NEAR);
+	}
+	
+	public int getThresholdDistant() {
+		return request(THRESHOLD_DISTANT);
+	}
+	
 	public void startMeasuring() {
 		serial.write(BEGIN_MEASURING);
 	}
@@ -66,27 +69,32 @@ public class RobotTimer implements TimerDataReceiver {
 			if (parameter.equals(LAP_FINISHED)) {
 				// TODO - communicate that a robot has finished
 			}
-			if (parameterRequests.containsKey(parameter)) {
-				parameterRequests.put(parameter, true);
-			}
 		} else {
 			System.out.println("Error: invalid parameter " + parameter + " received from timer!");
 		}
 	}
 
 	private int request(String parameter) {
-		int value = 0;
-		parameterRequests.put(parameter, false);
-		serial.write(parameter);
-		while(parameterRequests.get(parameter) == false);
-		value = parameters.get(parameter);
-		parameterRequests.remove(parameter);
-		return value;
+		return parameters.get(parameter);
 	}
 
 	private void set(String parameter, int value) {
 		serial.write(parameter + Integer.toString(value));
 		parameters.put(parameter, value);
+	}
+	
+	private void initializeParameters() {
+		parameters = new HashMap<String, Integer>();
+		parameterRequests = new HashMap<String, Boolean>();
+
+		parameters.put(THRESHOLD_NEAR, 0);
+		parameters.put(THRESHOLD_DISTANT, 0);
+		parameters.put(TOLERANCE, 0);
+		parameters.put(TIME_MINIMUM, 0);
+		parameters.put(TIMES_MEASURE, 0);
+		parameters.put(DELAY_MEASURE, 0);
+		parameters.put(MEASURED_VALUE, 0);
+		parameters.put(LAP_FINISHED, 0);
 	}
 
 }

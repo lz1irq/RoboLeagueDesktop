@@ -14,6 +14,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -25,6 +26,7 @@ import javax.swing.event.TableModelListener;
 import net.miginfocom.swing.MigLayout;
 import bg.roboleague.desktop.robots.Robot;
 import bg.roboleague.desktop.robots.RobotList;
+import bg.roboleague.desktop.robots.timer.RobotTimer;
 
 public class MainWindow extends JFrame {
 
@@ -35,12 +37,13 @@ public class MainWindow extends JFrame {
 	private final static int WINDOW_HEIGHT = 600;
 
 	private Robot selectedRobot = null;
-
+	private RobotTimer timer;
 	private boolean timerEnabled;
 
-	public MainWindow(RobotList robolist, boolean enabled) {
+	public MainWindow(RobotList robolist, RobotTimer timer, boolean enabled) {
 		robots = robolist;
 		timerEnabled = enabled;
+		this.timer = timer;
 		setUpWindow();
 		addMenuBar();
 		addGUIElements();
@@ -171,6 +174,19 @@ public class MainWindow extends JFrame {
 
 		JMenu settingsMenu = new JMenu("Settings");
 		settingsMenu.setMnemonic(KeyEvent.VK_S);
+		
+		JMenuItem calibration = new JMenuItem("Timer calibration");
+		calibration.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JPanel calibrationWindow = new TimerCalibrationWindow(timer);
+				JOptionPane.showConfirmDialog(null, calibrationWindow, "Timer Calibration",
+						JOptionPane.OK_CANCEL_OPTION);
+				
+			}
+		});
+		settingsMenu.add(calibration);
 
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic(KeyEvent.VK_H);
