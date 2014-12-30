@@ -46,8 +46,7 @@ public class SerialInterface {
 
 		ports.clear();
 		while (portList.hasMoreElements()) {
-			CommPortIdentifier port = (CommPortIdentifier) portList
-					.nextElement();
+			CommPortIdentifier port = (CommPortIdentifier) portList.nextElement();
 			if (port.getPortType() == port.PORT_SERIAL) {
 				String portName = port.getName();
 				ports.put(portName, port);
@@ -68,17 +67,15 @@ public class SerialInterface {
 
 	public void connect(String portName, int baudRate) {
 		try {
-			CommPortIdentifier portIdentifier = CommPortIdentifier
-					.getPortIdentifier(portName);
+			CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 			CommPort port = portIdentifier.open("RoboLeague Desktop", 2000);
 			serialPort = (SerialPort) port;
 
-			serialPort.setSerialPortParams(baudRate, DEFAULT_DATABITS,
-					DEFAULT_STOPBITS, DEFAULT_PARITY);
+			serialPort.setSerialPortParams(baudRate, DEFAULT_DATABITS, DEFAULT_STOPBITS,
+					DEFAULT_PARITY);
 			serialPort.notifyOnDataAvailable(true);
 
-			input = new BufferedReader(new InputStreamReader(
-					serialPort.getInputStream()));
+			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			output = serialPort.getOutputStream();
 
 			serialPort.addEventListener(new SerialPortEventListener() {
@@ -88,8 +85,7 @@ public class SerialInterface {
 					try {
 						notifyReceivers(input.readLine());
 					} catch (IOException e) {
-						System.out
-								.println("Error: cannot read from serial port!");
+						System.out.println("Error: cannot read from serial port!");
 						e.printStackTrace();
 					}
 				}
