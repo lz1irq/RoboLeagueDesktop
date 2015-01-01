@@ -32,10 +32,10 @@ public class SerialInterface {
 	private BufferedReader input;
 	private OutputStream output;
 
-	private List<TimerDataReceiver> receivers;
+	private List<SerialReceiver> receivers;
 
 	public SerialInterface() {
-		receivers = new ArrayList<TimerDataReceiver>();
+		receivers = new ArrayList<SerialReceiver>();
 		ports = new HashMap<String, CommPortIdentifier>();
 	}
 
@@ -108,16 +108,16 @@ public class SerialInterface {
 
 	}
 
-	public void addReceiver(TimerDataReceiver receiver) {
+	public void addReceiver(SerialReceiver receiver) {
 		receivers.add(receiver);
 	}
 
-	public void removeReceiver(TimerDataReceiver receiver) {
+	public void removeReceiver(SerialReceiver receiver) {
 		receivers.remove(receiver);
 	}
 
 	protected void notifyReceivers(String command) {
-		for (TimerDataReceiver receiver : receivers) {
+		for (SerialReceiver receiver : receivers) {
 			receiver.receive(command);
 		}
 	}

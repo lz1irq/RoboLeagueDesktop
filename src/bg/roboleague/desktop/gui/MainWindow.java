@@ -27,6 +27,7 @@ import net.miginfocom.swing.MigLayout;
 import bg.roboleague.desktop.robots.Robot;
 import bg.roboleague.desktop.robots.RobotList;
 import bg.roboleague.desktop.robots.timer.RobotTimer;
+import bg.roboleague.desktop.robots.timer.TimerDataReceiver;
 
 public class MainWindow extends JFrame {
 
@@ -75,8 +76,7 @@ public class MainWindow extends JFrame {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				String robotName = (String) JOptionPane
-						.showInputDialog("New robot name");
+				String robotName = (String) JOptionPane.showInputDialog("New robot name");
 				if (robotName != null && robotName.length() > 0) {
 					robots.add(robotName);
 				}
@@ -102,20 +102,17 @@ public class MainWindow extends JFrame {
 		JScrollPane lapTimes = new JScrollPane(jt);
 
 		final JList robotList = new JList(robots);
-		robotList.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
+		robotList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-					@Override
-					public void valueChanged(ListSelectionEvent e) {
-						ListSelectionModel model = (ListSelectionModel) e
-								.getSource();
-						if (model.isSelectionEmpty() == false) {
-							selectedRobot = robots.getElementAt(model
-									.getMinSelectionIndex());
-							tmod.setSelectedRobot(selectedRobot);
-						}
-					}
-				});
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				ListSelectionModel model = (ListSelectionModel) e.getSource();
+				if (model.isSelectionEmpty() == false) {
+					selectedRobot = robots.getElementAt(model.getMinSelectionIndex());
+					tmod.setSelectedRobot(selectedRobot);
+				}
+			}
+		});
 
 		robotList.setCellRenderer(new RobotRenderer());
 		robotList.setVisibleRowCount(4);
@@ -144,8 +141,8 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		
-		if(timerEnabled == false) {
+
+		if (timerEnabled == false) {
 			lapToggleButton.setEnabled(false);
 		}
 
@@ -174,17 +171,19 @@ public class MainWindow extends JFrame {
 
 		JMenu settingsMenu = new JMenu("Settings");
 		settingsMenu.setMnemonic(KeyEvent.VK_S);
-		
+
 		JMenuItem calibration = new JMenuItem("Timer calibration");
 		calibration.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JPanel calibrationWindow = new TimerCalibrationWindow(timer);
+				timer.addReceiver((TimerDataReceiver) calibrationWindow);
 				JOptionPane.showConfirmDialog(null, calibrationWindow, "Timer Calibration",
 						JOptionPane.OK_CANCEL_OPTION);
-				
+				timer.removeReceiver((TimerDataReceiver)calibrationWindow);
 			}
+				
 		});
 		settingsMenu.add(calibration);
 

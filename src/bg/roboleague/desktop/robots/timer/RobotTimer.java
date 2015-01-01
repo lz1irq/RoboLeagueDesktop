@@ -1,10 +1,12 @@
 package bg.roboleague.desktop.robots.timer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.Timer;
 
-public class RobotTimer implements TimerDataReceiver {
+public class RobotTimer implements SerialReceiver {
 
 	public final static String THRESHOLD_NEAR = "NER";
 	public final static String THRESHOLD_DISTANT = "DST";
@@ -27,13 +29,31 @@ public class RobotTimer implements TimerDataReceiver {
 
 	private HashMap<String, Integer> parameters;
 
-	private HashMap<String, Boolean> parameterRequests;
+	private List<TimerDataReceiver> receivers;
 
 	public RobotTimer(SerialInterface sint) {
 		serial = sint;
 		serial.addReceiver(this);
+		
+		receivers = new ArrayList<TimerDataReceiver>();
 		initializeParameters();
 	}
+	
+	public void addReceiver(TimerDataReceiver receiver) {
+		receivers.add(receiver);
+	}
+	
+	public void removeReceiver(TimerDataReceiver receiver) {
+		receivers.remove(receiver);
+	}
+	
+	public void notifyReceivers(String parameter, int value) {
+		for(TimerDataReceiver receiver: receivers) {
+			receiver.receive(parameter, value);
+		}
+	}
+	
+	
 
 	public void enterCalibrationMode() {
 		serial.write(CALIBRATE);
@@ -43,12 +63,14 @@ public class RobotTimer implements TimerDataReceiver {
 		serial.write(STANDBY);
 	}
 	
-	public int getThresholdNear() {
-		return request(THRESHOLD_NEAR);
+	public int getParameter(String parameter) {
+		return parameters.get(parameter);
 	}
 	
-	public int getThresholdDistant() {
-		return request(THRESHOLD_DISTANT);
+	public void setParameter(String parameter, int value) {
+		if(parameters.containsKey(parameter)) {
+			serial.write(parameter + value);
+		}
 	}
 	
 	public void startMeasuring() {
@@ -63,30 +85,24 @@ public class RobotTimer implements TimerDataReceiver {
 	public void receive(String command) {
 		String parameter = command.substring(0, 3);
 		int value = Integer.parseInt(command.substring(3));
-
+		
 		if (parameters.containsKey(parameter)) {
+			
 			parameters.put(parameter, value);
-			if (parameter.equals(LAP_FINISHED)) {
-				// TODO - communicate that a robot has finished
-			}
+			notifyReceivers(parameter, value);
 		} else {
 			System.out.println("Error: invalid parameter " + parameter + " received from timer!");
 		}
 	}
 
-	private int request(String parameter) {
-		return parameters.get(parameter);
-	}
-
 	private void set(String parameter, int value) {
-		serial.write(parameter + Integer.toString(value));
+		
 		parameters.put(parameter, value);
 	}
 	
 	private void initializeParameters() {
 		parameters = new HashMap<String, Integer>();
-		parameterRequests = new HashMap<String, Boolean>();
-
+		
 		parameters.put(THRESHOLD_NEAR, 0);
 		parameters.put(THRESHOLD_DISTANT, 0);
 		parameters.put(TOLERANCE, 0);
