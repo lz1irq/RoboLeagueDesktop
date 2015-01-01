@@ -33,7 +33,7 @@ public class LapTimesTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		int result = 0;
 		if (columnIndex == 0) {
-			result = rowIndex + 1; // most people count from 1, not from 0
+			result = rowIndex;
 		} else if (columnIndex == 1) {
 			if (selectedRobot != null)
 				result = selectedRobot.getLapTime(rowIndex);

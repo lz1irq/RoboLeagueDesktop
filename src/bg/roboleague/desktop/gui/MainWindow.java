@@ -1,5 +1,6 @@
 package bg.roboleague.desktop.gui;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -37,6 +38,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 	private final static int WINDOW_WIDTH = 800;
 	private final static int WINDOW_HEIGHT = 600;
 
+	private int selectedLap;
 	private Robot selectedRobot = null;
 	private RobotTimer timer;
 	private boolean timerEnabled;
@@ -45,6 +47,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 		robots = robolist;
 		timerEnabled = enabled;
 		this.timer = timer;
+		timer.addReceiver(this);
 		setUpWindow();
 		addMenuBar();
 		addGUIElements();
@@ -135,8 +138,12 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 			public void actionPerformed(ActionEvent event) {
 				JButton btn = (JButton) event.getSource();
 				if (btn.getText().equals("Start")) {
-					timer.startMeasuring();
-					btn.setText("Stop");
+					int lap = lapTable.getSelectedRow();
+					if (lap != -1) {
+							selectedLap = lap;
+							timer.startMeasuring();
+							btn.setText("Stop");
+					}
 				} else {
 					btn.setText("Start");
 					timer.stopMeasuring();
@@ -215,6 +222,27 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 
 	@Override
 	public void receive(String parameter, int value) {
-
+		if(timer.isMeasuring()) {
+			switch(parameter) {
+			case RobotTimer.LAP_FINISHED:
+				System.out.println(selectedRobot.getName() + " has finished lap " + selectedLap + " in " + value);
+				JTable laps = (JTable) findComponentByName("lapTable");
+				laps.setValueAt(value, selectedLap, 1);
+				break;
+			case RobotTimer.LAP_STARTED:
+				System.out.println(selectedRobot.getName() + " has started!");
+			break;
+			}
+		}
+	}
+	
+	private Component findComponentByName(String name) {
+		Component comp = null;
+		for(Component component: getComponents()) {
+			if (component.getName().equals(name)) {
+				comp = component;
+			}
+		}
+		return comp;
 	}
 }

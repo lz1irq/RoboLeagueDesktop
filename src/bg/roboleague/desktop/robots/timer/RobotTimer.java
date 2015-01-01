@@ -31,53 +31,59 @@ public class RobotTimer implements SerialReceiver {
 
 	private List<TimerDataReceiver> receivers;
 
+	private boolean measuring = false;
+
 	public RobotTimer(SerialInterface sint) {
 		serial = sint;
 		serial.addReceiver(this);
-		
+
 		receivers = new ArrayList<TimerDataReceiver>();
 		initializeParameters();
 	}
-	
+
+	public boolean isMeasuring() {
+		return measuring;
+	}
+
 	public void addReceiver(TimerDataReceiver receiver) {
 		receivers.add(receiver);
 	}
-	
+
 	public void removeReceiver(TimerDataReceiver receiver) {
 		receivers.remove(receiver);
 	}
-	
+
 	public void notifyReceivers(String parameter, int value) {
-		for(TimerDataReceiver receiver: receivers) {
+		for (TimerDataReceiver receiver : receivers) {
 			receiver.receive(parameter, value);
 		}
 	}
-	
-	
 
 	public void enterCalibrationMode() {
 		serial.write(CALIBRATE);
 	}
-	
+
 	public void exitCalibrationMode() {
 		serial.write(STANDBY);
 	}
-	
+
 	public int getParameter(String parameter) {
 		return parameters.get(parameter);
 	}
-	
+
 	public void setParameter(String parameter, int value) {
-		if(parameters.containsKey(parameter)) {
+		if (parameters.containsKey(parameter)) {
 			serial.write(parameter + value);
 		}
 	}
-	
+
 	public void startMeasuring() {
+		measuring = true;
 		serial.write(BEGIN_MEASURING);
 	}
 
 	public void stopMeasuring() {
+		measuring = false;
 		serial.write(STOP_MEASURING);
 	}
 
@@ -85,24 +91,25 @@ public class RobotTimer implements SerialReceiver {
 	public void receive(String command) {
 		String parameter = command.substring(0, 3);
 		int value = Integer.parseInt(command.substring(3));
-		
+		System.out.println(parameter + "=" + value);
+		notifyReceivers(parameter, value);
+
 		if (parameters.containsKey(parameter)) {
-			
 			parameters.put(parameter, value);
-			notifyReceivers(parameter, value);
+
 		} else {
 			System.out.println("Error: invalid parameter " + parameter + " received from timer!");
 		}
 	}
 
 	private void set(String parameter, int value) {
-		
+
 		parameters.put(parameter, value);
 	}
-	
+
 	private void initializeParameters() {
 		parameters = new HashMap<String, Integer>();
-		
+
 		parameters.put(THRESHOLD_NEAR, 0);
 		parameters.put(THRESHOLD_DISTANT, 0);
 		parameters.put(TOLERANCE, 0);
