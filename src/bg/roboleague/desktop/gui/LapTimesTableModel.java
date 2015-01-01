@@ -26,7 +26,7 @@ public class LapTimesTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return 3;
+		return Robot.LAPS;
 	}
 
 	@Override
@@ -64,6 +64,7 @@ public class LapTimesTableModel extends AbstractTableModel {
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		if(columnIndex == 1) {
 			selectedRobot.setLapTime(rowIndex, Integer.parseInt((String)aValue));
+			fireTableDataChanged();
 		}
 	}
 

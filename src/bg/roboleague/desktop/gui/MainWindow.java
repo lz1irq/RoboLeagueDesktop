@@ -29,7 +29,7 @@ import bg.roboleague.desktop.robots.RobotList;
 import bg.roboleague.desktop.robots.timer.RobotTimer;
 import bg.roboleague.desktop.robots.timer.TimerDataReceiver;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements TimerDataReceiver {
 
 	private RobotList robots;
 
@@ -97,9 +97,9 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		JTable jt = new JTable(tmod);
-		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		JScrollPane lapTimes = new JScrollPane(jt);
+		final JTable lapTable = new JTable(tmod);
+		lapTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane lapTimes = new JScrollPane(lapTable);
 
 		final JList robotList = new JList(robots);
 		robotList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -135,22 +135,37 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				JButton btn = (JButton) event.getSource();
 				if (btn.getText().equals("Start")) {
+					timer.startMeasuring();
 					btn.setText("Stop");
 				} else {
 					btn.setText("Start");
+					timer.stopMeasuring();
 				}
 			}
 		});
 
-		if (timerEnabled == false) {
-			lapToggleButton.setEnabled(false);
-		}
+		lapToggleButton.setEnabled(timerEnabled);
+
+		JButton lapResetButton = new JButton("Reset lap");
+		lapResetButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int lap = lapTable.getSelectedRow();
+				if (lap != -1) {
+					int reset = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset this lap result?",
+							"Confirm", JOptionPane.OK_CANCEL_OPTION);
+					if (reset == JOptionPane.OK_OPTION)
+						lapTable.setValueAt("0", lap, 1);
+				}
+			}
+		});
 
 		add(robotView, "span 2, height :550:, width :208:");
 		add(lapTimes, "wrap");
 		add(addButton, "width :100:");
 		add(removeButton, "width :100:");
 		add(lapToggleButton);
+		add(lapResetButton);
 	}
 
 	private void addMenuBar() {
@@ -181,10 +196,11 @@ public class MainWindow extends JFrame {
 				timer.addReceiver((TimerDataReceiver) calibrationWindow);
 				JOptionPane.showConfirmDialog(null, calibrationWindow, "Timer Calibration",
 						JOptionPane.OK_CANCEL_OPTION);
-				timer.removeReceiver((TimerDataReceiver)calibrationWindow);
+				timer.removeReceiver((TimerDataReceiver) calibrationWindow);
 			}
-				
+
 		});
+		calibration.setEnabled(timerEnabled);
 		settingsMenu.add(calibration);
 
 		JMenu helpMenu = new JMenu("Help");
@@ -195,5 +211,10 @@ public class MainWindow extends JFrame {
 		menuBar.add(helpMenu);
 
 		setJMenuBar(menuBar);
+	}
+
+	@Override
+	public void receive(String parameter, int value) {
+
 	}
 }
