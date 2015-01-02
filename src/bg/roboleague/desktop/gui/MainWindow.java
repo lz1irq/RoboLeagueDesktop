@@ -43,7 +43,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 	private Robot selectedRobot = null;
 	private RobotTimer timer;
 	private boolean timerEnabled;
-	
+
 	JTable lapTable;
 
 	public MainWindow(RobotList robolist, RobotTimer timer, boolean enabled) {
@@ -103,13 +103,13 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 				}
 			}
 		});
+
 		lapTable = new JTable(tmod);
 		lapTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane lapTimes = new JScrollPane(lapTable);
 
 		final JList robotList = new JList(robots);
 		robotList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				ListSelectionModel model = (ListSelectionModel) e.getSource();
@@ -143,9 +143,9 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 				if (btn.getText().equals("Start")) {
 					int lap = lapTable.getSelectedRow();
 					if (lap != -1) {
-							selectedLap = lap;
-							timer.startMeasuring();
-							btn.setText("Stop");
+						selectedLap = lap;
+						timer.startMeasuring();
+						btn.setText("Stop");
 					}
 				} else {
 					btn.setText("Start");
@@ -169,6 +169,14 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 				}
 			}
 		});
+		
+		JButton sortButton = new JButton("Sort");
+		sortButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				robots.sortByBestLap();				
+			}
+		});
 
 		add(robotView, "span 2, height :550:, width :208:");
 		add(lapTimes, "wrap");
@@ -176,6 +184,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 		add(removeButton, "width :100:");
 		add(lapToggleButton);
 		add(lapResetButton);
+		add(sortButton);
 	}
 
 	private void addMenuBar() {
@@ -221,21 +230,21 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 
 	@Override
 	public void receive(String parameter, int value) {
-		if(timer.isMeasuring()) {
-			switch(parameter) {
+		if (timer.isMeasuring()) {
+			switch (parameter) {
 			case RobotTimer.LAP_FINISHED:
 				lapTable.setValueAt(value, selectedLap, 1);
 				break;
 			case RobotTimer.LAP_STARTED:
 				System.out.println(selectedRobot.getName() + " has started!");
-			break;
+				break;
 			}
 		}
 	}
-	
+
 	private Component findComponentByName(String name) {
 		Component comp = null;
-		for(Component component: getComponents()) {
+		for (Component component : getComponents()) {
 			if (component.getName().equals(name)) {
 				comp = component;
 			}

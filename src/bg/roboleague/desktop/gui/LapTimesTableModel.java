@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.swing.table.AbstractTableModel;
 
 import bg.roboleague.desktop.robots.Robot;
+import bg.roboleague.desktop.robots.RobotList;
 
 public class LapTimesTableModel extends AbstractTableModel {
 
@@ -42,7 +43,10 @@ public class LapTimesTableModel extends AbstractTableModel {
 			result = Integer.toString(rowIndex);
 		} else if (columnIndex == 1) {
 			if (selectedRobot != null)
-				result = timeFormat.format(selectedRobot.getLapTime(rowIndex));
+				if (selectedRobot.getLapTime(rowIndex) != null) {
+					result = timeFormat.format(selectedRobot.getLapTime(rowIndex));
+				}
+				else result = timeFormat.format(new Date(0));
 		}
 
 		return result;
@@ -70,11 +74,14 @@ public class LapTimesTableModel extends AbstractTableModel {
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		if (columnIndex == 1) {
 			if (aValue instanceof String) {
-				try {
-					selectedRobot.setLapTime(rowIndex, timeFormat.parse((String)aValue));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				if(aValue.equals("0")) selectedRobot.setLapTime(rowIndex, 0);
+				else
+					try {
+						selectedRobot.setLapTime(rowIndex, timeFormat.parse((String)aValue));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+
 			} else {
 				selectedRobot.setLapTime(rowIndex, (int) aValue);
 			}

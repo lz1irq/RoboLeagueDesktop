@@ -91,7 +91,6 @@ public class RobotTimer implements SerialReceiver {
 	public void receive(String command) {
 		String parameter = command.substring(0, 3);
 		int value = Integer.parseInt(command.substring(3));
-		System.out.println(parameter + "=" + value);
 		notifyReceivers(parameter, value);
 
 		if (parameters.containsKey(parameter)) {
