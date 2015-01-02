@@ -3,9 +3,12 @@ package bg.roboleague.desktop.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -17,6 +20,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 
 	private final static int WINDOW_WIDTH = 400;
 	private final static int WINDOW_HEIGHT = 150;
+	private final static String WINDOW_CAPTION = "Timer Calibration";
 
 	JLabel sensorReadingValue;
 	JLabel thresholdNearValue;
@@ -28,6 +32,18 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		this.timer = timer;
 		setupWindow();
 		addGUIElements();
+
+	}
+
+	public static int display(RobotTimer timer) {
+		JPanel calibrationWindow = new TimerCalibrationWindow(timer);
+		timer.addReceiver((TimerDataReceiver) calibrationWindow);
+
+		int userChoice = JOptionPane.showConfirmDialog(null, calibrationWindow, "WINDOW_CAPTION",
+				JOptionPane.OK_CANCEL_OPTION);
+
+		timer.removeReceiver((TimerDataReceiver) calibrationWindow);
+		return userChoice;
 	}
 
 	private void addGUIElements() {
@@ -77,7 +93,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 	public void receive(String parameter, int value) {
 
 		String valueText = Integer.toString(value);
-			
+
 		switch (parameter) {
 		case RobotTimer.MEASURED_VALUE:
 			sensorReadingValue.setText(valueText);

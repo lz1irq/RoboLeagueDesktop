@@ -14,6 +14,8 @@ import bg.roboleague.desktop.robots.timer.*;
 
 public class Main {
 
+	private static RobotTimer timer;
+	
 	public static void main(String[] args) throws IOException {
 		final String robotFile = "robots.txt";
 		final RobotList robots = new RobotList();
@@ -24,6 +26,7 @@ public class Main {
 		robots.importRobots();
 
 		final SerialInterface serial = new SerialInterface();
+		timer = new RobotTimer(serial);
 
 		SerialSetupWindow setup = new SerialSetupWindow();
 		final int result = JOptionPane.showConfirmDialog(null, setup, "Timer Setup", JOptionPane.OK_CANCEL_OPTION);
@@ -31,14 +34,12 @@ public class Main {
 		if (result == JOptionPane.OK_OPTION) {
 			serial.connect(setup.getPortName(), setup.getBaudRate());
 			timerEnabled = true;
-			
+			TimerCalibrationWindow.display(timer);
 		} else {
 			timerEnabled = false;
 			JOptionPane.showMessageDialog(null, "You will only be able to look at/edit current scores",
 					"Timer not set up properly", JOptionPane.WARNING_MESSAGE);
 		}
-
-		final RobotTimer timer = new RobotTimer(serial);
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -49,5 +50,4 @@ public class Main {
 		});
 
 	}
-
 }

@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -201,11 +202,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JPanel calibrationWindow = new TimerCalibrationWindow(timer);
-				timer.addReceiver((TimerDataReceiver) calibrationWindow);
-				JOptionPane.showConfirmDialog(null, calibrationWindow, "Timer Calibration",
-						JOptionPane.OK_CANCEL_OPTION);
-				timer.removeReceiver((TimerDataReceiver) calibrationWindow);
+				TimerCalibrationWindow.display(timer);
 			}
 
 		});
