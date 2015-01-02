@@ -19,8 +19,6 @@ public class Main {
 		final RobotList robots = new RobotList();
 
 		final boolean timerEnabled;
-		boolean enabled = true;
-
 		robots.setImporter(new RobotFileImporter(robotFile));
 		robots.addExporter(new RobotFileExporter(robotFile));
 		robots.importRobots();
@@ -32,6 +30,8 @@ public class Main {
 
 		if (result == JOptionPane.OK_OPTION) {
 			serial.connect(setup.getPortName(), setup.getBaudRate());
+			timerEnabled = true;
+			
 		} else {
 			timerEnabled = false;
 			JOptionPane.showMessageDialog(null, "You will only be able to look at/edit current scores",
@@ -43,7 +43,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				JFrame ex = new MainWindow(robots, timer, result == JOptionPane.OK_OPTION);
+				JFrame ex = new MainWindow(robots, timer, timerEnabled);
 				ex.setVisible(true);
 			}
 		});

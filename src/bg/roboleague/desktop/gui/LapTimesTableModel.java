@@ -1,5 +1,10 @@
 package bg.roboleague.desktop.gui;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.table.AbstractTableModel;
 
 import bg.roboleague.desktop.robots.Robot;
@@ -8,6 +13,7 @@ public class LapTimesTableModel extends AbstractTableModel {
 
 	private static String columnNames[] = { "Lap", "Time" };
 	private Robot selectedRobot;
+	private final static DateFormat timeFormat = new SimpleDateFormat("mm:ss:SSS");
 
 	public LapTimesTableModel() {
 		super();
@@ -31,12 +37,12 @@ public class LapTimesTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		int result = 0;
+		String result = null;
 		if (columnIndex == 0) {
-			result = rowIndex;
+			result = Integer.toString(rowIndex);
 		} else if (columnIndex == 1) {
 			if (selectedRobot != null)
-				result = selectedRobot.getLapTime(rowIndex);
+				result = timeFormat.format(selectedRobot.getLapTime(rowIndex));
 		}
 
 		return result;
@@ -59,13 +65,20 @@ public class LapTimesTableModel extends AbstractTableModel {
 	public Robot getSelectedRobot() {
 		return selectedRobot;
 	}
-	
+
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		if(columnIndex == 1) {
-			selectedRobot.setLapTime(rowIndex, Integer.parseInt((String)aValue));
+		if (columnIndex == 1) {
+			if (aValue instanceof String) {
+				try {
+					selectedRobot.setLapTime(rowIndex, timeFormat.parse((String)aValue));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			} else {
+				selectedRobot.setLapTime(rowIndex, (int) aValue);
+			}
 			fireTableDataChanged();
 		}
 	}
-
 }

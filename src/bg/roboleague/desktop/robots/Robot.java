@@ -1,13 +1,17 @@
 package bg.roboleague.desktop.robots;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Robot {
 	public final static int LAPS = 3;
 	private String name;
-	private int lapTimes[];
+	private Date lapTimes[];
 	
 	public Robot(String rName) {
 		name = rName;
-		lapTimes =  new int[LAPS];
+		lapTimes =  new Date[LAPS];
 	}
 
 	public String getName() {
@@ -18,12 +22,16 @@ public class Robot {
 		this.name = name;
 	}
 	
-	public int getLapTime(int lap) {
+	public Date getLapTime(int lap) {
 		return lapTimes[lap];
 	}
 	
-	public void setLapTime(int lap, int time) {
+	public void setLapTime(int lap, Date time) {
 		lapTimes[lap] = time;
+	}
+	
+	public void setLapTime(int lap, int time) {
+		lapTimes[lap] = new Date(time);		
 	}
 	
 	public String toString() {

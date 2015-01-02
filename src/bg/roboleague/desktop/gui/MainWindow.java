@@ -42,6 +42,8 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 	private Robot selectedRobot = null;
 	private RobotTimer timer;
 	private boolean timerEnabled;
+	
+	JTable lapTable;
 
 	public MainWindow(RobotList robolist, RobotTimer timer, boolean enabled) {
 		robots = robolist;
@@ -100,7 +102,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 				}
 			}
 		});
-		final JTable lapTable = new JTable(tmod);
+		lapTable = new JTable(tmod);
 		lapTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane lapTimes = new JScrollPane(lapTable);
 
@@ -225,9 +227,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 		if(timer.isMeasuring()) {
 			switch(parameter) {
 			case RobotTimer.LAP_FINISHED:
-				System.out.println(selectedRobot.getName() + " has finished lap " + selectedLap + " in " + value);
-				JTable laps = (JTable) findComponentByName("lapTable");
-				laps.setValueAt(value, selectedLap, 1);
+				lapTable.setValueAt(value, selectedLap, 1);
 				break;
 			case RobotTimer.LAP_STARTED:
 				System.out.println(selectedRobot.getName() + " has started!");
