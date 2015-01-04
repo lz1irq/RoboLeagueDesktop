@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.Timer;
-
 public class RobotTimer implements SerialReceiver {
 
 	public final static String THRESHOLD_NEAR = "NER";
