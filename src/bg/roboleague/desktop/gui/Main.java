@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import bg.roboleague.desktop.robots.RobotList;
 import bg.roboleague.desktop.robots.data.*;
-import bg.roboleague.desktop.robots.timer.*;
+import bg.roboleague.desktop.timer.*;
 
 public class Main {
 

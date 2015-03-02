@@ -13,8 +13,7 @@ public abstract class RobotExporter {
 	protected String exportLocation;
 	
 	public RobotExporter(String location) {
-		this.exportLocation = location;
-		this.encoding = DEFAULT_ENCODING;
+		this(location, DEFAULT_ENCODING);
 	}
 	
 	public RobotExporter(String location, String encoding) {

@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-import bg.roboleague.desktop.robots.timer.SerialInterface;
+import bg.roboleague.desktop.timer.SerialInterface;
 
 public class SerialSetupWindow extends JPanel {
 	private final static int WINDOW_WIDTH = 800;

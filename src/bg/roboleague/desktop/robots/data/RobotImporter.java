@@ -9,8 +9,8 @@ public abstract class RobotImporter {
 	
 	protected final static String DEFAULT_ENCODING = "UTF-8";
 	
-	protected String importLocation;
 	protected String encoding;
+	protected String importLocation;
 	
 	public RobotImporter(String location) {
 		this(location, DEFAULT_ENCODING);
@@ -19,6 +19,14 @@ public abstract class RobotImporter {
 	public RobotImporter(String location, String encoding) {
 		importLocation = location;
 		this.encoding = encoding;
+	}
+	
+	public String getImportLocation() {
+		return importLocation;
+	}
+
+	public void setImportLocation(String importLocation) {
+		this.importLocation = importLocation;
 	}
 	
 	public abstract List<Robot> importRobots() throws IOException;

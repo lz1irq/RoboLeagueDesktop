@@ -24,8 +24,7 @@ public class RobotList extends AbstractListModel<Robot> {
 	}
 
 	public Robot add(String name) {
-		robots.add(new Robot(name));
-		fireIntervalAdded(this, robots.size() - 1, robots.size() - 1);
+		add(new Robot(name));
 		return this.getLast();
 	}
 

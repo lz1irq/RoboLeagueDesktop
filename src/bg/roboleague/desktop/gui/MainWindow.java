@@ -28,8 +28,8 @@ import javax.swing.event.TableModelListener;
 import net.miginfocom.swing.MigLayout;
 import bg.roboleague.desktop.robots.Robot;
 import bg.roboleague.desktop.robots.RobotList;
-import bg.roboleague.desktop.robots.timer.RobotTimer;
-import bg.roboleague.desktop.robots.timer.TimerDataReceiver;
+import bg.roboleague.desktop.timer.RobotTimer;
+import bg.roboleague.desktop.timer.TimerDataReceiver;
 
 public class MainWindow extends JFrame implements TimerDataReceiver {
 
@@ -232,10 +232,10 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 	public void receive(String parameter, int value) {
 		if (timer.isMeasuring()) {
 			switch (parameter) {
-			case RobotTimer.LAP_FINISHED:
+			case RobotTimer.ROBOT_FINISHED:
 				lapTable.setValueAt(value, selectedLap, 1);
 				break;
-			case RobotTimer.LAP_STARTED:
+			case RobotTimer.ROBOT_STARTED:
 				System.out.println(selectedRobot.getName() + " has started!");
 				break;
 			}

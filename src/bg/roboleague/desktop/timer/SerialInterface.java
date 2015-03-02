@@ -1,4 +1,4 @@
-package bg.roboleague.desktop.robots.timer;
+package bg.roboleague.desktop.timer;
 
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
@@ -107,6 +107,17 @@ public class SerialInterface {
 		}
 
 	}
+	
+	public void close() {
+		if(serialPort != null) {
+			serialPort.close();
+			serialPort = null;
+		}
+	}
+	
+	public boolean isConnected() {
+		return serialPort != null;
+	}
 
 	public void addReceiver(SerialReceiver receiver) {
 		receivers.add(receiver);
@@ -116,9 +127,9 @@ public class SerialInterface {
 		receivers.remove(receiver);
 	}
 
-	protected void notifyReceivers(String command) {
+	protected void notifyReceivers(String line) {
 		for (SerialReceiver receiver : receivers) {
-			receiver.receive(command);
+			receiver.receive(line);
 		}
 	}
 

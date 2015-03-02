@@ -1,4 +1,4 @@
-package bg.roboleague.desktop.robots.timer;
+package bg.roboleague.desktop.timer;
 
 public interface TimerDataReceiver {
 

@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import net.miginfocom.swing.MigLayout;
-import bg.roboleague.desktop.robots.timer.RobotTimer;
-import bg.roboleague.desktop.robots.timer.TimerDataReceiver;
+import bg.roboleague.desktop.timer.RobotTimer;
+import bg.roboleague.desktop.timer.TimerDataReceiver;
 
 public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver {
 
@@ -62,7 +62,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		setNear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				timer.setParameter(RobotTimer.THRESHOLD_NEAR, timer.getParameter(RobotTimer.MEASURED_VALUE));
+				timer.setParameter(RobotTimer.THRESHOLD_NEAR, timer.getParameter(RobotTimer.SENSOR_READING));
 			}
 		});
 
@@ -70,7 +70,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		setDistant.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				timer.setParameter(RobotTimer.THRESHOLD_DISTANT, timer.getParameter(RobotTimer.MEASURED_VALUE));
+				timer.setParameter(RobotTimer.THRESHOLD_DISTANT, timer.getParameter(RobotTimer.SENSOR_READING));
 			}
 		});
 
@@ -95,7 +95,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		String valueText = Integer.toString(value);
 
 		switch (parameter) {
-		case RobotTimer.MEASURED_VALUE:
+		case RobotTimer.SENSOR_READING:
 			sensorReadingValue.setText(valueText);
 			break;
 		case RobotTimer.THRESHOLD_NEAR:
