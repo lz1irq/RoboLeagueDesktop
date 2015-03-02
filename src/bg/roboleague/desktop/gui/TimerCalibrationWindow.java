@@ -55,14 +55,14 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		JLabel thresholdNear = new JLabel("Threshold near:");
 		JLabel thresholdDistant = new JLabel("Threshold distant:");
 
-		thresholdNearValue = new JLabel(Integer.toString(timer.getParameter(timer.THRESHOLD_NEAR)));
-		thresholdDistantValue = new JLabel(Integer.toString(timer.getParameter(timer.THRESHOLD_DISTANT)));
+		thresholdNearValue = new JLabel(Integer.toString(timer.getThresholdNear()));
+		thresholdDistantValue = new JLabel(Integer.toString(timer.getThresholdDistant()));
 
 		JButton setNear = new JButton(setButtonText);
 		setNear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				timer.setParameter(RobotTimer.THRESHOLD_NEAR, timer.getParameter(RobotTimer.SENSOR_READING));
+				timer.setThresholdNear(timer.getSensorReading());
 			}
 		});
 
@@ -70,7 +70,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		setDistant.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				timer.setParameter(RobotTimer.THRESHOLD_DISTANT, timer.getParameter(RobotTimer.SENSOR_READING));
+				timer.setThresholdDistant(timer.getSensorReading());
 			}
 		});
 
@@ -89,21 +89,31 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		UIManager.put("OptionPane.minimumSize", new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 	}
 
+
 	@Override
-	public void receive(String parameter, int value) {
+	public void receiveSensorValue(int value) {
+		sensorReadingValue.setText(Integer.toString(value));
+	}
 
-		String valueText = Integer.toString(value);
+	@Override
+	public void receiveThresholdNear(int thresholdNear) {
+		thresholdNearValue.setText(Integer.toString(thresholdNear));
+	}
 
-		switch (parameter) {
-		case RobotTimer.SENSOR_READING:
-			sensorReadingValue.setText(valueText);
-			break;
-		case RobotTimer.THRESHOLD_NEAR:
-			thresholdNearValue.setText(valueText);
-			break;
-		case RobotTimer.THRESHOLD_DISTANT:
-			thresholdDistantValue.setText(valueText);
-		}
+	@Override
+	public void receiveThresholdDistant(int thresholdDistant) {
+		thresholdDistantValue.setText(Integer.toString(thresholdDistant));
+	}
 
+	@Override
+	public void eventRobotStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void eventRobotFinished(int time) {
+		// TODO Auto-generated method stub
+		
 	}
 }

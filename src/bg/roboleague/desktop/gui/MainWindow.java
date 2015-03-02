@@ -228,20 +228,6 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 		setJMenuBar(menuBar);
 	}
 
-	@Override
-	public void receive(String parameter, int value) {
-		if (timer.isMeasuring()) {
-			switch (parameter) {
-			case RobotTimer.ROBOT_FINISHED:
-				lapTable.setValueAt(value, selectedLap, 1);
-				break;
-			case RobotTimer.ROBOT_STARTED:
-				System.out.println(selectedRobot.getName() + " has started!");
-				break;
-			}
-		}
-	}
-
 	private Component findComponentByName(String name) {
 		Component comp = null;
 		for (Component component : getComponents()) {
@@ -250,5 +236,33 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 			}
 		}
 		return comp;
+	}
+
+	@Override
+	public void receiveSensorValue(int value) {
+	}
+	
+
+	@Override
+	public void receiveThresholdNear(int thresholdNear) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveThresholdDistant(int thresholdDistant) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void eventRobotStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void eventRobotFinished(int time) {
+		lapTable.setValueAt(time, selectedLap, 1);		
 	}
 }

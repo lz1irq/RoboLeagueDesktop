@@ -7,27 +7,27 @@ import java.util.List;
 public class RobotTimer implements SerialReceiver {
 
 	//state control commands
-	public final static String ENABLE_MEASURING = "EMS";
-	public final static String DISABLE_MEASURING = "DMS";
-	public final static String BEGIN_CALIBRATION = "BCL";
-	public final static String END_CALIBRATION = "ECL";
+	private final static String ENABLE_MEASURING = "EMS";
+	private final static String DISABLE_MEASURING = "DMS";
+	private final static String BEGIN_CALIBRATION = "BCL";
+	private final static String END_CALIBRATION = "ECL";
 
 	//callibration commands
-	public final static String THRESHOLD_NEAR = "NER";
-	public final static String THRESHOLD_DISTANT = "DST";
-	public final static String TOLERANCE = "TOL";
-	public final static String AMOUNT = "TMS";
-	public final static String DELAY = "DLY";
-	public final static String MINIMAL_TIME = "MTI";
+	private final static String THRESHOLD_NEAR = "NER";
+	private final static String THRESHOLD_DISTANT = "DST";
+	private final static String TOLERANCE = "TOL";
+	private final static String AMOUNT = "TMS";
+	private final static String DELAY = "DLY";
+	private final static String MINIMAL_TIME = "MTI";
 
 	//reporting back events/values
-	public final static String ROBOT_STARTED = "RST";
-	public final static String ROBOT_FINISHED = "RFN";
-	public final static String SENSOR_READING = "SRD";
+	private final static String ROBOT_STARTED = "RST";
+	private final static String ROBOT_FINISHED = "RFN";
+	private final static String SENSOR_READING = "SRD";
 
 
-	public final static int COMMAND_LENGTH = 3;
-	public final static int PARAMETER_LENGTH = 4;
+	private final static int COMMAND_LENGTH = 3;
+	private final static int PARAMETER_LENGTH = 4;
 	
 	private SerialInterface serial;
 
@@ -58,9 +58,35 @@ public class RobotTimer implements SerialReceiver {
 	}
 
 	public void notifyReceivers(String parameter, int value) {
-		for (TimerDataReceiver receiver : receivers) {
-			receiver.receive(parameter, value);
+		switch(parameter) {
+		case SENSOR_READING:
+			for (TimerDataReceiver receiver : receivers) {
+				receiver.receiveSensorValue(value);
+			}
+			break;
+			
+		case THRESHOLD_NEAR:
+			for (TimerDataReceiver receiver : receivers) {
+				receiver.receiveThresholdNear(value);
+			}
+			break;
+		case THRESHOLD_DISTANT:
+			for (TimerDataReceiver receiver : receivers) {
+				receiver.receiveThresholdDistant(value);
+			}
+			break;
+		case ROBOT_STARTED:
+			for (TimerDataReceiver receiver : receivers) {
+				receiver.eventRobotStarted();
+			}
+			break;
+		case ROBOT_FINISHED:
+			for (TimerDataReceiver receiver : receivers) {
+				receiver.eventRobotFinished(value);
+			}
+			break;
 		}
+		
 	}
 
 	public void enterCalibrationMode() {
@@ -73,6 +99,22 @@ public class RobotTimer implements SerialReceiver {
 	
 	public int getSensorReading() {
 		return parameters.get(SENSOR_READING);
+	}
+	
+	public int getThresholdNear() {
+		return parameters.get(THRESHOLD_NEAR);
+	}
+	
+	public void setThresholdNear(int threshold) {
+		setParameter(THRESHOLD_NEAR, threshold);
+	}
+	
+	public int getThresholdDistant() {
+		return parameters.get(THRESHOLD_DISTANT);
+	}
+	
+	public void setThresholdDistant(int threshold) {
+		setParameter(THRESHOLD_DISTANT, threshold);
 	}
 
 	public int getParameter(String parameter) {
@@ -107,11 +149,6 @@ public class RobotTimer implements SerialReceiver {
 		} else {
 			System.out.println("Error: invalid parameter " + parameter + " received from timer!");
 		}
-	}
-
-	private void set(String parameter, int value) {
-
-		parameters.put(parameter, value);
 	}
 
 	private void initializeParameters() {
