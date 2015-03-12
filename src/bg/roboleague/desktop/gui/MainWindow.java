@@ -36,11 +36,11 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 	private RobotList robots;
 
 	private final static String WINDOW_TITLE = "RoboLeague";
-	private final static int WINDOW_WIDTH = 800;
+	private final static int WINDOW_WIDTH = 500;
 	private final static int WINDOW_HEIGHT = 600;
 
 	private int selectedLap;
-	private Robot selectedRobot = null;
+	private Robot selectedRobot;
 	private RobotTimer timer;
 	private boolean timerEnabled;
 
@@ -63,17 +63,6 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				try {
-					robots.export();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
 	}
 
 	private void addGUIElements() {
@@ -103,12 +92,15 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 				}
 			}
 		});
-
 		lapTable = new JTable(tmod);
 		lapTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane lapTimes = new JScrollPane(lapTable);
 
 		final JList robotList = new JList(robots);
+		robotList.setCellRenderer(new RobotRenderer());
+		robotList.setVisibleRowCount(4);
+		final JScrollPane robotView = new JScrollPane(robotList);
+		
 		robotList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -120,9 +112,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 			}
 		});
 
-		robotList.setCellRenderer(new RobotRenderer());
-		robotList.setVisibleRowCount(4);
-		final JScrollPane robotView = new JScrollPane(robotList);
+		
 
 		JButton removeButton = new JButton("Remove");
 		removeButton.addActionListener(new ActionListener() {
@@ -179,7 +169,7 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 		});
 
 		add(robotView, "span 2, height :550:, width :208:");
-		add(lapTimes, "wrap");
+		add(lapTimes, "span 3, wrap");
 		add(addButton, "width :100:");
 		add(removeButton, "width :100:");
 		add(lapToggleButton);
@@ -264,5 +254,29 @@ public class MainWindow extends JFrame implements TimerDataReceiver {
 	@Override
 	public void eventRobotFinished(int time) {
 		lapTable.setValueAt(time, selectedLap, 1);		
+	}
+
+	@Override
+	public void receiveTolerance(int tolerance) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveMeasurementTimes(int times) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveDelay(int delay) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveMinimalTime(int time) {
+		// TODO Auto-generated method stub
+		
 	}
 }

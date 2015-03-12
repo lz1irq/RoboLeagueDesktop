@@ -29,7 +29,7 @@ public class Main {
 		timer = new RobotTimer(serial);
 
 		SerialSetupWindow setup = new SerialSetupWindow();
-		final int result = JOptionPane.showConfirmDialog(null, setup, "Timer Setup", JOptionPane.OK_CANCEL_OPTION);
+		final int result = JOptionPane.showConfirmDialog(null, setup, "Serial Port Setup", JOptionPane.OK_CANCEL_OPTION);
 
 		if (result == JOptionPane.OK_OPTION) {
 			serial.connect(setup.getPortName(), setup.getBaudRate());

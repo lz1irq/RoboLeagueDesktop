@@ -40,7 +40,7 @@ public class LapTimesTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		String result = null;
 		if (columnIndex == 0) {
-			result = Integer.toString(rowIndex);
+			result = Integer.toString(rowIndex+1);
 		} else if (columnIndex == 1) {
 			if (selectedRobot != null)
 				if (selectedRobot.getLapTime(rowIndex) != null) {

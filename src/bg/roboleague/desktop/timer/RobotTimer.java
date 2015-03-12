@@ -25,9 +25,7 @@ public class RobotTimer implements SerialReceiver {
 	private final static String ROBOT_FINISHED = "RFN";
 	private final static String SENSOR_READING = "SRD";
 
-
 	private final static int COMMAND_LENGTH = 3;
-	private final static int PARAMETER_LENGTH = 4;
 	
 	private SerialInterface serial;
 
@@ -116,17 +114,39 @@ public class RobotTimer implements SerialReceiver {
 	public void setThresholdDistant(int threshold) {
 		setParameter(THRESHOLD_DISTANT, threshold);
 	}
-
-	public int getParameter(String parameter) {
-		return parameters.get(parameter);
+	
+	public int getMeasurementTimes() {
+		return parameters.get(AMOUNT); 
 	}
-
-	public void setParameter(String parameter, int value) {
-		if (parameters.containsKey(parameter)) {
-			serial.write(parameter + value);
-		}
+	
+	public void setMeasurementTimes(int times) {
+		setParameter(AMOUNT, times);
 	}
-
+	
+	public int getTolerance() {
+		return parameters.get(TOLERANCE);
+	}
+	
+	public void setTolerance(int tolerance) {
+		setParameter(TOLERANCE, tolerance);
+	}
+	
+	public int getDelay() {
+		return parameters.get(DELAY);
+	}
+	
+	public void setDelay(int delay) {
+		setParameter(DELAY, delay);
+	}
+	
+	public int getMinimalTime() {
+		return parameters.get(MINIMAL_TIME);
+	}
+	
+	public void setMinimalTime(int time) {
+		setParameter(MINIMAL_TIME, time);
+	}
+	
 	public void startMeasuring() {
 		measuring = true;
 		serial.write(ENABLE_MEASURING);
@@ -151,6 +171,12 @@ public class RobotTimer implements SerialReceiver {
 		}
 	}
 
+	private void setParameter(String parameter, int value) {
+		if (parameters.containsKey(parameter)) {
+			serial.write(parameter + value);
+		}
+	}
+	
 	private void initializeParameters() {
 		parameters = new HashMap<String, Integer>();
 

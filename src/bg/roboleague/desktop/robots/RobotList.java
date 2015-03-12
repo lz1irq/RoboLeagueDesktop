@@ -31,6 +31,12 @@ public class RobotList extends AbstractListModel<Robot> {
 	public Robot add(Robot robot) {
 		robots.add(robot);
 		fireIntervalAdded(this, robots.size() - 1, robots.size() - 1);
+		try {
+			export();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this.getLast();
 	}
 
@@ -38,6 +44,12 @@ public class RobotList extends AbstractListModel<Robot> {
 		int removedIndex = robots.indexOf(robot);
 		robots.remove(robot);
 		fireIntervalRemoved(this, removedIndex + 1, removedIndex + 1);
+		try {
+			export();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void remove(String name) {

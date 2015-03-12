@@ -39,7 +39,7 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 		JPanel calibrationWindow = new TimerCalibrationWindow(timer);
 		timer.addReceiver((TimerDataReceiver) calibrationWindow);
 
-		int userChoice = JOptionPane.showConfirmDialog(null, calibrationWindow, "WINDOW_CAPTION",
+		int userChoice = JOptionPane.showConfirmDialog(null, calibrationWindow, "Timer Calibration",
 				JOptionPane.OK_CANCEL_OPTION);
 
 		timer.removeReceiver((TimerDataReceiver) calibrationWindow);
@@ -113,6 +113,30 @@ public class TimerCalibrationWindow extends JPanel implements TimerDataReceiver 
 
 	@Override
 	public void eventRobotFinished(int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveTolerance(int tolerance) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveMeasurementTimes(int times) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveDelay(int delay) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveMinimalTime(int time) {
 		// TODO Auto-generated method stub
 		
 	}
